@@ -1,14 +1,14 @@
 {
-    "name": "trpc-svelte-query-adapter",
+    "name": "query",
     "private": true,
     "type": "module",
     "workspaces": [
         "packages/*",
         "test-app"
     ],
-	"scripts": {
-		"dev": "bun run --filter test-app dev",
-		"build": "bun run --filter test-app build",
-		"check": "bun run --filter test-app check"
-	}
+    "scripts": {
+        "dev": "bun run --filter test-app dev",
+        "build": "bun run --filter test-app build",
+        "check": "bun run --filter test-app check"
+    }
 }
