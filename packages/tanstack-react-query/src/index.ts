@@ -1,4 +1,5 @@
 export { createTRPCContext } from './internals/Context';
+export type { SetTRPCContextOptions } from './internals/Context';
 export type {
   TRPCOptionsProxy,
   inferInput,
@@ -22,5 +23,4 @@ export type {
   TRPCSubscriptionResult,
 } from './internals/subscriptionOptions';
 export { createTRPCOptionsProxy } from './internals/createOptionsProxy';
-export { useSubscription } from './internals/subscriptionOptions';
 export type * from './internals/types';

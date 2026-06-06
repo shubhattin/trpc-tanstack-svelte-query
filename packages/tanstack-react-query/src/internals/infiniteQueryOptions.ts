@@ -1,13 +1,11 @@
 import type {
+  CreateInfiniteQueryOptions,
   DataTag,
-  DefinedInitialDataInfiniteOptions,
   QueryClient,
   QueryFunction,
   SkipToken,
-  UndefinedInitialDataInfiniteOptions,
-  UnusedSkipTokenInfiniteOptions,
-} from '@tanstack/react-query';
-import { infiniteQueryOptions, skipToken } from '@tanstack/react-query';
+} from '@tanstack/svelte-query';
+import { infiniteQueryOptions, skipToken } from '@tanstack/svelte-query';
 import type { TRPCClientErrorLike, TRPCUntypedClient } from '@trpc/client';
 import type { DistributiveOmit } from '@trpc/server/unstable-core-do-not-import';
 import type {
@@ -35,7 +33,7 @@ interface UndefinedTRPCInfiniteQueryOptionsIn<
   TError,
   TFeatureFlags extends FeatureFlags,
 > extends DistributiveOmit<
-      UndefinedInitialDataInfiniteOptions<
+      CreateInfiniteQueryOptions<
         TQueryFnData,
         TError,
         TRPCInfiniteData<TInput, TData>,
@@ -55,7 +53,7 @@ interface UndefinedTRPCInfiniteQueryOptionsOut<
   TError,
   TFeatureFlags extends FeatureFlags,
 > extends DistributiveOmit<
-      UndefinedInitialDataInfiniteOptions<
+      CreateInfiniteQueryOptions<
         TQueryFnData,
         TError,
         TRPCInfiniteData<TInput, TData>,
@@ -80,7 +78,7 @@ interface DefinedTRPCInfiniteQueryOptionsIn<
   TError,
   TFeatureFlags extends FeatureFlags,
 > extends DistributiveOmit<
-      DefinedInitialDataInfiniteOptions<
+      CreateInfiniteQueryOptions<
         TQueryFnData,
         TError,
         TRPCInfiniteData<TInput, TData>,
@@ -100,52 +98,7 @@ interface DefinedTRPCInfiniteQueryOptionsOut<
   TError,
   TFeatureFlags extends FeatureFlags,
 > extends DistributiveOmit<
-      DefinedInitialDataInfiniteOptions<
-        TQueryFnData,
-        TError,
-        TRPCInfiniteData<TInput, TData>,
-        TRPCQueryKey<TFeatureFlags['keyPrefix']>,
-        NonNullable<ExtractCursorType<TInput>> | null
-      >,
-      'initialPageParam'
-    >,
-    TRPCQueryOptionsResult {
-  queryKey: DataTag<
-    TRPCQueryKey<TFeatureFlags['keyPrefix']>,
-    TRPCInfiniteData<TInput, TData>,
-    TError
-  >;
-  initialPageParam: NonNullable<ExtractCursorType<TInput>> | null;
-}
-
-interface UnusedSkipTokenTRPCInfiniteQueryOptionsIn<
-  TInput,
-  TQueryFnData,
-  TData,
-  TError,
-  TFeatureFlags extends FeatureFlags,
-> extends DistributiveOmit<
-      UnusedSkipTokenInfiniteOptions<
-        TQueryFnData,
-        TError,
-        TRPCInfiniteData<TInput, TData>,
-        TRPCQueryKey<TFeatureFlags['keyPrefix']>,
-        NonNullable<ExtractCursorType<TInput>> | null
-      >,
-      ReservedOptions
-    >,
-    TRPCQueryBaseOptions {
-  initialCursor?: NonNullable<ExtractCursorType<TInput>> | null;
-}
-
-interface UnusedSkipTokenTRPCInfiniteQueryOptionsOut<
-  TInput,
-  TQueryFnData,
-  TData,
-  TError,
-  TFeatureFlags extends FeatureFlags,
-> extends DistributiveOmit<
-      UnusedSkipTokenInfiniteOptions<
+      CreateInfiniteQueryOptions<
         TQueryFnData,
         TError,
         TRPCInfiniteData<TInput, TData>,
@@ -187,28 +140,6 @@ export interface TRPCInfiniteQueryOptions<TDef extends ResolverDef> {
     TDef['featureFlags']
   >;
   <TQueryFnData extends TDef['output'], TData = TQueryFnData>(
-    input: TDef['input'],
-    opts: UnusedSkipTokenTRPCInfiniteQueryOptionsIn<
-      TDef['input'],
-      TQueryFnData,
-      TData,
-      TRPCClientErrorLike<{
-        transformer: TDef['transformer'];
-        errorShape: TDef['errorShape'];
-      }>,
-      TDef['featureFlags']
-    >,
-  ): UnusedSkipTokenTRPCInfiniteQueryOptionsOut<
-    TDef['input'],
-    TQueryFnData,
-    TData,
-    TRPCClientErrorLike<{
-      transformer: TDef['transformer'];
-      errorShape: TDef['errorShape'];
-    }>,
-    TDef['featureFlags']
-  >;
-  <TQueryFnData extends TDef['output'], TData = TQueryFnData>(
     input: TDef['input'] | SkipToken,
     opts: UndefinedTRPCInfiniteQueryOptionsIn<
       TDef['input'],
@@ -234,18 +165,10 @@ export interface TRPCInfiniteQueryOptions<TDef extends ResolverDef> {
 
 type AnyTRPCInfiniteQueryOptionsIn<TFeatureFlags extends FeatureFlags> =
   | DefinedTRPCInfiniteQueryOptionsIn<any, any, any, any, TFeatureFlags>
-  | UnusedSkipTokenTRPCInfiniteQueryOptionsIn<any, any, any, any, TFeatureFlags>
   | UndefinedTRPCInfiniteQueryOptionsIn<any, any, any, any, TFeatureFlags>;
 
 type AnyTRPCInfiniteQueryOptionsOut<TFeatureFlags extends FeatureFlags> =
   | DefinedTRPCInfiniteQueryOptionsOut<any, any, any, any, TFeatureFlags>
-  | UnusedSkipTokenTRPCInfiniteQueryOptionsOut<
-      any,
-      any,
-      any,
-      any,
-      TFeatureFlags
-    >
   | UndefinedTRPCInfiniteQueryOptionsOut<any, any, any, any, TFeatureFlags>;
 
 export function trpcInfiniteQueryOptions<

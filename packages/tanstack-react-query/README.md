@@ -8,9 +8,9 @@
   <strong>End-to-end typesafe APIs made easy</strong>
 </p>
 
-# `@trpc/tanstack-react-query`
+# `@trpc/tanstack-svelte-query`
 
-> A tRPC wrapper around `@tanstack/react-query`.
+> A tRPC wrapper around `@tanstack/svelte-query`.
 
 > [!WARNING]
 >
@@ -19,24 +19,24 @@
 
 ## Documentation
 
-Full documentation can be found at https://trpc.io/docs/client/tanstack-react-query/setup.
+This package follows the tRPC TanStack Query option-factory pattern and adapts it for Svelte Query.
 
 ## Installation
 
-> Requires `@tanstack/react-query` v5.62.8 or higher
+> Requires `@tanstack/svelte-query` v6 or higher
 
 ```bash
 # npm
-npm install @trpc/tanstack-react-query @tanstack/react-query
+npm install @trpc/tanstack-svelte-query @tanstack/svelte-query
 
 # Yarn
-yarn add @trpc/tanstack-react-query @tanstack/react-query
+yarn add @trpc/tanstack-svelte-query @tanstack/svelte-query
 
 # pnpm
-pnpm add @trpc/tanstack-react-query @tanstack/react-query
+pnpm add @trpc/tanstack-svelte-query @tanstack/svelte-query
 
 # Bun
-bun add @trpc/tanstack-react-query @tanstack/react-query
+bun add @trpc/tanstack-svelte-query @tanstack/svelte-query
 ```
 
 ## AI Agents

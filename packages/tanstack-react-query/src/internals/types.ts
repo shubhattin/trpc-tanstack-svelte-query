@@ -1,4 +1,4 @@
-import type { InfiniteData } from '@tanstack/react-query';
+import type { InfiniteData } from '@tanstack/svelte-query';
 import type { TRPCRequestOptions } from '@trpc/client';
 
 /**
@@ -44,8 +44,8 @@ export type TRPCInfiniteData<TInput, TOutput> = InfiniteData<
 /**
  * @public
  */
-export interface TRPCReactRequestOptions
-  // For RQ, we use their internal AbortSignals instead of letting the user pass their own
+export interface TRPCSvelteRequestOptions
+  // For TanStack Query, we use its internal AbortSignals instead of letting the user pass their own
   extends Omit<TRPCRequestOptions, 'signal'> {
   /**
    * Opt out of SSR for this query by passing `ssr: false`
@@ -64,7 +64,7 @@ export interface TRPCQueryBaseOptions {
   /**
    * tRPC-related options
    */
-  trpc?: TRPCReactRequestOptions;
+  trpc?: TRPCSvelteRequestOptions;
 }
 
 /**

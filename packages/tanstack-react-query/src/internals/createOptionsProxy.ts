@@ -1,4 +1,4 @@
-import type { DataTag, QueryClient, QueryFilters } from '@tanstack/react-query';
+import type { DataTag, QueryClient, QueryFilters } from '@tanstack/svelte-query';
 import type {
   TRPCClient,
   TRPCClientErrorLike,
@@ -311,7 +311,7 @@ export interface TRPCOptionsProxyOptionsInternal<
 export interface TRPCOptionsProxyOptionsExternal<
   TRouter extends AnyTRPCRouter,
 > {
-  client: TRPCUntypedClient<TRouter> | TRPCClient<TRouter>;
+  client: TRPCUntypedClient<TRouter> | TRPCClient<TRouter> | object;
 }
 
 export type TRPCOptionsProxyOptions<
@@ -359,10 +359,11 @@ export function createTRPCOptionsProxy<
         );
       }
 
+      const client = opts.client as TRPCUntypedClient<TRouter> | TRPCClient<TRouter>;
       const untypedClient =
-        opts.client instanceof TRPCUntypedClient
-          ? opts.client
-          : getUntypedClient(opts.client);
+        client instanceof TRPCUntypedClient
+          ? client
+          : getUntypedClient(client as TRPCClient<TRouter>);
 
       return untypedClient[type](path, input, trpcOpts);
     };

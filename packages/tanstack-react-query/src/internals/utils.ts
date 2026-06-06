@@ -1,4 +1,4 @@
-import { skipToken, type QueryClient } from '@tanstack/react-query';
+import { skipToken, type QueryClient } from '@tanstack/svelte-query';
 import {
   isFunction,
   isObject,

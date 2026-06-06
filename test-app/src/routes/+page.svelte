@@ -1,17 +1,22 @@
 <script lang="ts">
-	import { createQuery } from "@tanstack/svelte-query";
-	import { client } from "$lib/trpc/client";
+	import { createQuery } from '@tanstack/svelte-query';
+	import { useTrpc, useTrpcClient } from '$lib/trpc/client';
+
+	const trpc = useTrpc();
+	const trpcClient = useTrpcClient();
 
 	let a = $state(2);
 	let b = $state(3);
+	let directResult = $state<number | null>(null);
 
-	const addQuery = createQuery(() => ({
-		queryKey: ["add", a, b],
-		queryFn: () => client.add.query({ a, b }),
-	}));
+	const addQuery = createQuery(() => trpc.add.queryOptions({ a, b }));
+
+	async function runDirectQuery() {
+		directResult = await trpcClient.add.query({ a, b });
+	}
 </script>
 
-<h1>tRPC + TanStack Query</h1>
+<h1>tRPC + TanStack Svelte Query</h1>
 
 <form class="form" onsubmit={(e) => e.preventDefault()}>
 	<label>
@@ -32,6 +37,12 @@
 	<p>{a} + {b} = {addQuery.data}</p>
 {/if}
 
+<button type="button" onclick={runDirectQuery}>Run direct client query</button>
+
+{#if directResult !== null}
+	<p>Direct client result: {directResult}</p>
+{/if}
+
 <style>
 	.form {
 		display: flex;
@@ -48,5 +59,9 @@
 	input {
 		width: 5rem;
 		padding: 0.25rem 0.5rem;
+	}
+
+	button {
+		margin-top: 0.5rem;
 	}
 </style>

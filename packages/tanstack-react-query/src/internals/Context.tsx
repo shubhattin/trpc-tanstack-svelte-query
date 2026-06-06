@@ -1,7 +1,7 @@
-import type { QueryClient } from '@tanstack/react-query';
+import type { QueryClient } from '@tanstack/svelte-query';
 import type { TRPCClient } from '@trpc/client';
 import type { AnyTRPCRouter } from '@trpc/server';
-import * as React from 'react';
+import { createContext } from 'svelte';
 import type { TRPCOptionsProxy } from './createOptionsProxy';
 import { createTRPCOptionsProxy } from './createOptionsProxy';
 import type {
@@ -10,83 +10,58 @@ import type {
   KeyPrefixOptions,
 } from './types';
 
-type TRPCProviderType<
+export type SetTRPCContextOptions<
   TRouter extends AnyTRPCRouter,
   TFeatureFlags extends FeatureFlags = DefaultFeatureFlags,
-> = React.FC<
-  {
-    children: React.ReactNode;
-    queryClient: QueryClient;
-    trpcClient: TRPCClient<TRouter>;
-  } & KeyPrefixOptions<TFeatureFlags>
->;
+> = {
+  queryClient: QueryClient;
+  trpcClient: TRPCClient<TRouter> | object;
+} & KeyPrefixOptions<TFeatureFlags>;
 
 export interface CreateTRPCContextResult<
   TRouter extends AnyTRPCRouter,
   TFeatureFlags extends FeatureFlags = DefaultFeatureFlags,
 > {
-  TRPCProvider: TRPCProviderType<TRouter, TFeatureFlags>;
+  setTRPCContext: (
+    opts: SetTRPCContextOptions<TRouter, TFeatureFlags>,
+  ) => TRPCOptionsProxy<TRouter, TFeatureFlags>;
   useTRPC: () => TRPCOptionsProxy<TRouter, TFeatureFlags>;
+  useTrpc: () => TRPCOptionsProxy<TRouter, TFeatureFlags>;
   useTRPCClient: () => TRPCClient<TRouter>;
+  useTrpcClient: () => TRPCClient<TRouter>;
 }
 
 /**
- * Create a set of type-safe provider-consumers
+ * Create a set of type-safe Svelte context helpers.
  *
- * @see https://trpc.io/docs/client/tanstack-react-query/setup#3a-setup-the-trpc-context-provider
+ * Call `setTRPCContext()` during a parent component's initialization, then
+ * `useTRPC()`/`useTRPCClient()` from descendants.
  */
 export function createTRPCContext<
   TRouter extends AnyTRPCRouter,
   TFeatureFlags extends FeatureFlags = DefaultFeatureFlags,
 >(): CreateTRPCContextResult<TRouter, TFeatureFlags> {
-  const TRPCClientContext = React.createContext<TRPCClient<TRouter> | null>(
-    null,
-  );
-  const TRPCContext = React.createContext<TRPCOptionsProxy<
+  const [useTRPCClient, setTRPCClient] = createContext<TRPCClient<TRouter>>();
+  const [useTRPC, setTRPC] = createContext<TRPCOptionsProxy<
     TRouter,
     TFeatureFlags
-  > | null>(null);
+  >>();
 
-  const TRPCProvider: TRPCProviderType<TRouter, TFeatureFlags> = (props) => {
-    const value = React.useMemo(
-      () =>
-        createTRPCOptionsProxy<TRouter, TFeatureFlags>({
-          client: props.trpcClient,
-          queryClient: props.queryClient,
-          keyPrefix: props.keyPrefix as any,
-        }),
-      [props.trpcClient, props.queryClient, props.keyPrefix],
-    );
-    return (
-      <TRPCClientContext.Provider value={props.trpcClient}>
-        <TRPCContext.Provider value={value}>
-          {props.children}
-        </TRPCContext.Provider>
-      </TRPCClientContext.Provider>
-    );
-  };
-  TRPCProvider.displayName = 'TRPCProvider';
+  function setTRPCContext(
+    opts: SetTRPCContextOptions<TRouter, TFeatureFlags>,
+  ) {
+    const trpc = createTRPCOptionsProxy<TRouter, TFeatureFlags>({
+      client: opts.trpcClient,
+      queryClient: opts.queryClient,
+      keyPrefix: opts.keyPrefix as any,
+    });
 
-  function useTRPC() {
-    const utils = React.useContext(TRPCContext);
-    if (!utils) {
-      throw new Error('useTRPC() can only be used inside of a <TRPCProvider>');
-    }
-    return utils;
+    setTRPCClient(opts.trpcClient as TRPCClient<TRouter>);
+    return setTRPC(trpc);
   }
 
-  function useTRPCClient() {
-    const client = React.useContext(TRPCClientContext);
-    if (!client) {
-      throw new Error(
-        'useTRPCClient() can only be used inside of a <TRPCProvider>',
-      );
-    }
-    return client;
-  }
+  const useTrpc = useTRPC;
+  const useTrpcClient = useTRPCClient;
 
-  return { TRPCProvider, useTRPC, useTRPCClient } as CreateTRPCContextResult<
-    TRouter,
-    TFeatureFlags
-  >;
+  return { setTRPCContext, useTRPC, useTrpc, useTRPCClient, useTrpcClient };
 }

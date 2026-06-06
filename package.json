@@ -10,5 +10,8 @@
         "dev": "bun run --filter test-app dev",
         "build": "bun run --filter test-app build",
         "check": "bun run --filter test-app check"
+    },
+    "devDependencies": {
+        "@types/node": "^25.9.2"
     }
 }

@@ -22,8 +22,9 @@
 	},
 	"dependencies": {
 		"@tanstack/svelte-query": "^6",
-		"@trpc/client": "^11.17.0",
-		"@trpc/server": "^11.17.0",
+		"@trpc/client": "11.17.0",
+		"@trpc/server": "11.17.0",
+		"@trpc/tanstack-svelte-query": "workspace:*",
 		"zod": "^4.4.3"
 	}
 }

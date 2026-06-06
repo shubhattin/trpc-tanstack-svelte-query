@@ -1,8 +1,8 @@
 {
-  "name": "@trpc/tanstack-react-query",
+  "name": "@trpc/tanstack-svelte-query",
   "type": "module",
   "version": "11.17.0",
-  "description": "TanStack React Query Integration for tRPC",
+  "description": "TanStack Svelte Query Integration for tRPC",
   "author": "juliusmarminge",
   "license": "MIT",
   "main": "./dist/index.cjs",
@@ -46,33 +46,30 @@
   ],
   "eslintConfig": {
     "rules": {
-      "react-hooks/exhaustive-deps": "error",
       "no-restricted-imports": [
         "error",
-        "@trpc/tanstack-react-query"
+        "@trpc/tanstack-svelte-query"
       ],
       "@typescript-eslint/prefer-function-type": "off"
     }
   },
   "peerDependencies": {
-    "@tanstack/react-query": "^5.80.3",
+    "@tanstack/svelte-query": "^6",
     "@trpc/client": "11.17.0",
     "@trpc/server": "11.17.0",
-    "react": ">=18.2.0",
+    "svelte": "^5.25.0",
     "typescript": ">=5.7.2"
   },
   "devDependencies": {
     "@tanstack/intent": "^0.0.27",
-    "@tanstack/react-query": "^5.80.3",
+    "@tanstack/svelte-query": "^6",
     "@trpc/client": "11.17.0",
     "@trpc/server": "11.17.0",
     "@types/node": "^22.13.5",
-    "@types/react": "^19.1.0",
     "eslint": "^9.26.0",
     "event-source-polyfill": "^1.0.31",
     "konn": "^0.7.0",
-    "react": "^19.1.0",
-    "react-dom": "^19.1.0",
+    "svelte": "^5.56.2",
     "tsdown": "0.12.7",
     "typescript": "^5.9.2",
     "vitest": "^4.0.18",

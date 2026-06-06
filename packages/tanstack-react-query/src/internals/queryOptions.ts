@@ -5,9 +5,8 @@ import type {
   QueryFunction,
   SkipToken,
   UndefinedInitialDataOptions,
-  UnusedSkipTokenOptions,
-} from '@tanstack/react-query';
-import { queryOptions, skipToken } from '@tanstack/react-query';
+} from '@tanstack/svelte-query';
+import { queryOptions, skipToken } from '@tanstack/svelte-query';
 import type { TRPCClientErrorLike, TRPCUntypedClient } from '@trpc/client';
 import type {
   coerceAsyncIterableToArray,
@@ -101,41 +100,6 @@ interface DefinedTRPCQueryOptionsOut<
   >;
 }
 
-interface UnusedSkipTokenTRPCQueryOptionsIn<
-  TQueryFnData,
-  TData,
-  TError,
-  TFeatureFlags extends FeatureFlags,
-> extends DistributiveOmit<
-      UnusedSkipTokenOptions<
-        coerceAsyncIterableToArray<TQueryFnData>,
-        TError,
-        coerceAsyncIterableToArray<TData>,
-        TRPCQueryKey<TFeatureFlags['keyPrefix']>
-      >,
-      ReservedOptions
-    >,
-    TRPCQueryBaseOptions {}
-
-interface UnusedSkipTokenTRPCQueryOptionsOut<
-  TQueryFnData,
-  TOutput,
-  TError,
-  TFeatureFlags extends FeatureFlags,
-> extends UnusedSkipTokenOptions<
-      coerceAsyncIterableToArray<TQueryFnData>,
-      TError,
-      coerceAsyncIterableToArray<TOutput>,
-      TRPCQueryKey<TFeatureFlags['keyPrefix']>
-    >,
-    TRPCQueryOptionsResult {
-  queryKey: DataTag<
-    TRPCQueryKey<TFeatureFlags['keyPrefix']>,
-    coerceAsyncIterableToArray<TOutput>,
-    TError
-  >;
-}
-
 export interface TRPCQueryOptions<
   TDef extends ResolverDef,
   TFeatureFlags extends FeatureFlags = DefaultFeatureFlags,
@@ -152,26 +116,6 @@ export interface TRPCQueryOptions<
       TFeatureFlags
     >,
   ): DefinedTRPCQueryOptionsOut<
-    TQueryFnData,
-    TData,
-    TRPCClientErrorLike<{
-      transformer: TDef['transformer'];
-      errorShape: TDef['errorShape'];
-    }>,
-    TFeatureFlags
-  >;
-  <TQueryFnData extends TDef['output'], TData = TQueryFnData>(
-    input: TDef['input'],
-    opts?: UnusedSkipTokenTRPCQueryOptionsIn<
-      TQueryFnData,
-      TData,
-      TRPCClientErrorLike<{
-        transformer: TDef['transformer'];
-        errorShape: TDef['errorShape'];
-      }>,
-      TFeatureFlags
-    >,
-  ): UnusedSkipTokenTRPCQueryOptionsOut<
     TQueryFnData,
     TData,
     TRPCClientErrorLike<{
@@ -204,14 +148,12 @@ export interface TRPCQueryOptions<
 
 type AnyTRPCQueryOptionsIn<TFeatureFlags extends FeatureFlags> =
   | DefinedTRPCQueryOptionsIn<unknown, unknown, unknown, TFeatureFlags>
-  | UnusedSkipTokenTRPCQueryOptionsIn<unknown, unknown, unknown, TFeatureFlags>
   | UndefinedTRPCQueryOptionsIn<unknown, unknown, unknown, TFeatureFlags>;
 
 type AnyTRPCQueryOptionsOut<
   TFeatureFlags extends FeatureFlags = DefaultFeatureFlags,
 > =
   | DefinedTRPCQueryOptionsOut<unknown, unknown, unknown, TFeatureFlags>
-  | UnusedSkipTokenTRPCQueryOptionsOut<unknown, unknown, unknown, TFeatureFlags>
   | UndefinedTRPCQueryOptionsOut<unknown, unknown, unknown, TFeatureFlags>;
 
 /**

@@ -1,8 +1,9 @@
 import type {
+  CreateMutationOptions,
   MutationFunction,
   QueryClient,
-  UseMutationOptions,
-} from '@tanstack/react-query';
+} from '@tanstack/svelte-query';
+import { mutationOptions } from '@tanstack/svelte-query';
 import type { TRPCClientErrorLike, TRPCUntypedClient } from '@trpc/client';
 import type {
   DistributiveOmit,
@@ -33,7 +34,7 @@ type TRPCMutationOptionsIn<
   TContext,
   TFeatureFlags extends FeatureFlags,
 > = DistributiveOmit<
-  UseMutationOptions<TOutput, TError, TInput, TContext>,
+  CreateMutationOptions<TOutput, TError, TInput, TContext>,
   ReservedOptions
 > &
   TRPCQueryBaseOptions &
@@ -45,7 +46,7 @@ interface TRPCMutationOptionsOut<
   TOutput,
   TContext,
   TFeatureFlags extends FeatureFlags,
-> extends UseMutationOptions<TOutput, TError, TInput, TContext>,
+> extends CreateMutationOptions<TOutput, TError, TInput, TContext>,
     TRPCQueryOptionsResult {
   mutationKey: TRPCMutationKey<TFeatureFlags['keyPrefix']>;
 }
@@ -128,20 +129,22 @@ export function trpcMutationOptions<TFeatureFlags extends FeatureFlags>(args: {
     return result;
   };
 
-  return {
-    ...opts,
-    mutationKey,
-    mutationFn,
-    onSuccess(...args) {
-      const originalFn = () =>
-        opts?.onSuccess?.(...args) ?? defaultOpts?.onSuccess?.(...args);
+  return Object.assign(
+    mutationOptions({
+      ...opts,
+      mutationKey,
+      mutationFn,
+      onSuccess(...args) {
+        const originalFn = () =>
+          opts?.onSuccess?.(...args) ?? defaultOpts?.onSuccess?.(...args);
 
-      return mutationSuccessOverride({
-        originalFn,
-        queryClient,
-        meta: opts?.meta ?? defaultOpts?.meta ?? {},
-      });
-    },
-    trpc: createTRPCOptionsResult({ path }),
-  };
+        return mutationSuccessOverride({
+          originalFn,
+          queryClient,
+          meta: opts?.meta ?? defaultOpts?.meta ?? {},
+        });
+      },
+    }),
+    { trpc: createTRPCOptionsResult({ path }) },
+  );
 }
