@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { createQuery } from "@tanstack/svelte-query";
-	import { useTrpc, useTrpcClient } from "$lib/trpc/client";
+	import { useTRPC, useTRPCClient } from "$lib/trpc/client";
 	import { queryClient } from "$lib/trpc/queryClient";
 
-	const trpc = useTrpc();
-	const trpcClient = useTrpcClient();
+	const trpc = useTRPC();
+	const trpcClient = useTRPCClient();
 
 	let a = $state(2);
 	let b = $state(3);
@@ -84,7 +84,8 @@
 <section class="section">
 	<h2>Manual query key invalidation</h2>
 	<p class="section-desc">
-		Enter values and choose which fields are included in the query key input.
+		Enter values and choose which fields are included in the query key
+		input.
 	</p>
 
 	<form class="form" onsubmit={(e) => e.preventDefault()}>
@@ -134,12 +135,12 @@
 		gap: 0.35rem;
 	}
 
-	input[type='number'] {
+	input[type="number"] {
 		width: 5rem;
 		padding: 0.25rem 0.5rem;
 	}
 
-	input[type='checkbox'] {
+	input[type="checkbox"] {
 		width: auto;
 		margin: 0;
 	}

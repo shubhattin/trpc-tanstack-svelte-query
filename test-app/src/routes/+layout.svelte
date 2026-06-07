@@ -2,13 +2,13 @@
 	import "../app.css";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
+	import TRPCContext from "@trpc/tanstack-svelte-query/TRPCContext.svelte";
 	import favicon from "$lib/assets/favicon.svg";
-	import { setTrpcContext } from "$lib/trpc/client";
 	import { queryClient } from "$lib/trpc/queryClient";
 	import { themeState } from "$lib/theme.svelte";
 	import { dev } from "$app/environment";
 
-	setTrpcContext();
+	import { client } from "$lib/trpc/client";
 	themeState.init();
 
 	let { children } = $props();
@@ -20,24 +20,26 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
-	<div class="app">
-		<header class="header">
-			<button
-				type="button"
-				class="theme-toggle"
-				onclick={() => themeState.toggle()}
-				aria-label="Toggle dark mode"
-			>
-				{themeState.theme === "dark" ? "Light mode" : "Dark mode"}
-			</button>
-		</header>
-		<main class="main">
-			{@render children()}
-		</main>
-	</div>
-	{#if dev}
-		<SvelteQueryDevtools />
-	{/if}
+	<TRPCContext trpcClient={client} queryClient={queryClient}>
+		<div class="app">
+			<header class="header">
+				<button
+					type="button"
+					class="theme-toggle"
+					onclick={() => themeState.toggle()}
+					aria-label="Toggle dark mode"
+				>
+					{themeState.theme === "dark" ? "Light mode" : "Dark mode"}
+				</button>
+			</header>
+			<main class="main">
+				{@render children()}
+			</main>
+		</div>
+		{#if dev}
+			<SvelteQueryDevtools />
+		{/if}
+	</TRPCContext>
 </QueryClientProvider>
 
 <style>

@@ -26,9 +26,21 @@ export interface CreateTRPCContextResult<
     opts: SetTRPCContextOptions<TRouter, TFeatureFlags>,
   ) => TRPCOptionsProxy<TRouter, TFeatureFlags>;
   useTRPC: () => TRPCOptionsProxy<TRouter, TFeatureFlags>;
-  useTrpc: () => TRPCOptionsProxy<TRouter, TFeatureFlags>;
   useTRPCClient: () => TRPCClient<TRouter>;
-  useTrpcClient: () => TRPCClient<TRouter>;
+}
+
+const defaultTRPCContextKey = Symbol.for(
+  '@trpc/tanstack-svelte-query/default-context',
+);
+
+type GlobalTRPCContextStore = typeof globalThis & {
+  [defaultTRPCContextKey]?:
+  | CreateTRPCContextResult<AnyTRPCRouter, FeatureFlags>
+  | undefined;
+};
+
+export function getDefaultTRPCContext() {
+  return (globalThis as GlobalTRPCContextStore)[defaultTRPCContextKey];
 }
 
 /**
@@ -60,8 +72,11 @@ export function createTRPCContext<
     return setTRPC(trpc);
   }
 
-  const useTrpc = useTRPC;
-  const useTrpcClient = useTRPCClient;
+  const context = {
+    setTRPCContext,
+    useTRPC,
+    useTRPCClient,
+  } satisfies CreateTRPCContextResult<TRouter, TFeatureFlags>;
 
-  return { setTRPCContext, useTRPC, useTrpc, useTRPCClient, useTrpcClient };
+  return context;
 }

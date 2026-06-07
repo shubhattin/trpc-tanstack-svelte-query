@@ -22,6 +22,7 @@
   },
   "exports": {
     "./package.json": "./package.json",
+    "./TRPCContext.svelte": "./src/TRPCContext.svelte",
     ".": {
       "import": {
         "types": "./dist/index.d.mts",
