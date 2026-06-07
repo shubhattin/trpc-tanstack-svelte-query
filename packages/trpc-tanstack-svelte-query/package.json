@@ -1,7 +1,7 @@
 {
   "name": "trpc-tanstack-svelte-query",
   "type": "module",
-  "version": "0.1.0-beta.1",
+  "version": "0.1.1",
   "description": "TanStack Svelte Query Integration for tRPC",
   "author": "shubhattin",
   "license": "MIT",
@@ -10,7 +10,7 @@
   "types": "./dist/index.d.cts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/trpc/trpc.git",
+    "url": "git+https://github.com/shubhattin/trpc-tanstack-svelte-query.git",
     "directory": "packages/trpc-tanstack-svelte-query"
   },
   "scripts": {
