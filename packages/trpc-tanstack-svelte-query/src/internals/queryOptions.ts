@@ -201,7 +201,12 @@ export function trpcQueryOptions<TFeatureFlags extends FeatureFlags>(args: {
       ...opts,
       queryKey: queryKey,
       queryFn: inputIsSkipToken ? skipToken : queryFn,
-    }),
+    } as UndefinedInitialDataOptions<
+      unknown,
+      unknown,
+      unknown,
+      TRPCQueryKey<TFeatureFlags['keyPrefix']>
+    >),
     { trpc: createTRPCOptionsResult({ path }) },
-  );
+  ) as AnyTRPCQueryOptionsOut<TFeatureFlags>;
 }

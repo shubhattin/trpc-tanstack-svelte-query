@@ -1,5 +1,5 @@
 {
-  "name": "@trpc/tanstack-svelte-query",
+  "name": "trpc-tanstack-svelte-query",
   "type": "module",
   "version": "11.17.0",
   "description": "TanStack Svelte Query Integration for tRPC",
@@ -12,7 +12,7 @@
   "repository": {
     "type": "git",
     "url": "git+https://github.com/trpc/trpc.git",
-    "directory": "packages/tanstack-react-query"
+    "directory": "packages/trpc-tanstack-svelte-query"
   },
   "scripts": {
     "build": "tsdown",
@@ -56,8 +56,8 @@
   },
   "peerDependencies": {
     "@tanstack/svelte-query": "^6",
-    "@trpc/client": "11.17.0",
-    "@trpc/server": "11.17.0",
+    "@trpc/client": "^11.17.0",
+    "@trpc/server": "^11.17.0",
     "svelte": "^5.25.0",
     "typescript": ">=5.7.2"
   },
@@ -79,14 +79,5 @@
   },
   "publishConfig": {
     "access": "public"
-  },
-  "funding": [
-    "https://trpc.io/sponsor"
-  ],
-  "keywords": [
-    "tanstack-intent"
-  ],
-  "bin": {
-    "intent": "./bin/intent.js"
   }
 }

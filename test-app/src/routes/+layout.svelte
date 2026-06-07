@@ -2,11 +2,11 @@
 	import "../app.css";
 	import { QueryClientProvider } from "@tanstack/svelte-query";
 	import { SvelteQueryDevtools } from "@tanstack/svelte-query-devtools";
-	import TRPCContext from "@trpc/tanstack-svelte-query/TRPCContext.svelte";
 	import favicon from "$lib/assets/favicon.svg";
 	import { queryClient } from "$lib/trpc/queryClient";
 	import { themeState } from "$lib/theme.svelte";
 	import { dev } from "$app/environment";
+	import TRPCProvider from "trpc-tanstack-svelte-query/TRPCContext.svelte";
 
 	import { client } from "$lib/trpc/client";
 	themeState.init();
@@ -20,7 +20,7 @@
 </svelte:head>
 
 <QueryClientProvider client={queryClient}>
-	<TRPCContext trpcClient={client} queryClient={queryClient}>
+	<TRPCProvider trpcClient={client} {queryClient}>
 		<div class="app">
 			<header class="header">
 				<button
@@ -39,7 +39,7 @@
 		{#if dev}
 			<SvelteQueryDevtools />
 		{/if}
-	</TRPCContext>
+	</TRPCProvider>
 </QueryClientProvider>
 
 <style>

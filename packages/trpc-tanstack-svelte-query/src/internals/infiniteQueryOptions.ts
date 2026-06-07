@@ -217,5 +217,5 @@ export function trpcInfiniteQueryOptions<
       initialPageParam: opts?.initialCursor ?? (input as any)?.cursor,
     }),
     { trpc: createTRPCOptionsResult({ path }) },
-  );
+  ) as AnyTRPCInfiniteQueryOptionsOut<TFeatureFlags>;
 }

@@ -1,5 +1,5 @@
 import { createTRPCClient, httpBatchLink } from '@trpc/client';
-import { createTRPCContext } from '@trpc/tanstack-svelte-query';
+import { createTRPCContext } from 'trpc-tanstack-svelte-query';
 import type { AppRouter } from './routes';
 
 export const client = createTRPCClient<AppRouter>({

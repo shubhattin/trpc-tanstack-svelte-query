@@ -30,7 +30,7 @@ export interface CreateTRPCContextResult<
 }
 
 const defaultTRPCContextKey = Symbol.for(
-  '@trpc/tanstack-svelte-query/default-context',
+  'trpc-tanstack-svelte-query/default-context',
 );
 
 type GlobalTRPCContextStore = typeof globalThis & {
@@ -77,6 +77,9 @@ export function createTRPCContext<
     useTRPC,
     useTRPCClient,
   } satisfies CreateTRPCContextResult<TRouter, TFeatureFlags>;
+
+  (globalThis as GlobalTRPCContextStore)[defaultTRPCContextKey] =
+    context as CreateTRPCContextResult<AnyTRPCRouter, FeatureFlags>;
 
   return context;
 }
