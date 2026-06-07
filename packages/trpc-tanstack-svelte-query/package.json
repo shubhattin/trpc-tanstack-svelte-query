@@ -3,7 +3,7 @@
   "type": "module",
   "version": "11.17.0",
   "description": "TanStack Svelte Query Integration for tRPC",
-  "author": "juliusmarminge",
+  "author": "shubhattin",
   "license": "MIT",
   "main": "./dist/index.cjs",
   "module": "./dist/index.mjs",
@@ -41,15 +41,6 @@
     "!**/*.test.*",
     "!**/__tests__"
   ],
-  "eslintConfig": {
-    "rules": {
-      "no-restricted-imports": [
-        "error",
-        "trpc-tanstack-svelte-query"
-      ],
-      "@typescript-eslint/prefer-function-type": "off"
-    }
-  },
   "peerDependencies": {
     "@tanstack/svelte-query": ">=6",
     "@trpc/client": ">=11.17.0",
@@ -62,17 +53,11 @@
     "@tanstack/svelte-query": "^6",
     "@trpc/client": "11.17.0",
     "@trpc/server": "11.17.0",
-    "@types/node": "^22.13.5",
-    "eslint": "^9.26.0",
-    "event-source-polyfill": "^1.0.31",
-    "konn": "^0.7.0",
     "svelte": "^5.56.2",
     "tsdown": "0.12.7",
     "typescript": "^5.9.2",
-    "vite": "^8.0.16",
-    "vitest": "^4.0.18",
-    "ws": "^8.0.0",
-    "zod": "^4.2.1"
+    "vitest": "^3.2.4",
+    "zod": "^4.4.3"
   },
   "publishConfig": {
     "access": "public"
