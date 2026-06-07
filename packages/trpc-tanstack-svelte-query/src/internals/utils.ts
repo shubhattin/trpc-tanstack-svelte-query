@@ -137,7 +137,7 @@ export function getQueryKeyInternal(opts: {
     if (!input && type === 'any') {
       // this matches also all mutations (see `getMutationKeyInternal`)
 
-      // for `utils.invalidate()` to match all queries (including vanilla react-query)
+      // for invalidation helpers to match all queries (including non-tRPC queries)
       // we don't want nested array if path is empty, i.e. `[]` instead of `[[]]`
       return splitPath.length ? [splitPath] : ([] as unknown as TRPCQueryKey);
     }

@@ -52,16 +52,14 @@ export interface DecorateRouterKeyable<TFeatureFlags extends FeatureFlags> {
   /**
    * Calculate the TanStack Query Key for any path, could be used to invalidate every procedure beneath this path
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/query-keys
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryKey
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/query-keys
    */
   pathKey: () => TRPCQueryKey<TFeatureFlags['keyPrefix']>;
 
   /**
    * Calculate a TanStack Query Filter for any path, could be used to manipulate every procedure beneath this path
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/filters
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryFilter
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/filters
    */
   pathFilter: (
     filters?: QueryFilters<TRPCQueryKey<TFeatureFlags['keyPrefix']>>,
@@ -99,18 +97,16 @@ export type inferOutput<
 export interface DecorateInfiniteQueryProcedure<TDef extends ResolverDef>
   extends TypeHelper<TDef> {
   /**
-   * Create a set of type-safe infinite query options that can be passed to `useInfiniteQuery`, `prefetchInfiniteQuery` etc.
+   * Create a set of type-safe infinite query options that can be passed to `createInfiniteQuery`, `prefetchInfiniteQuery` etc.
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/reference/infiniteQueryOptions#infinitequeryoptions
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#infiniteQueryOptions
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/reference/infiniteQueryOptions
    */
   infiniteQueryOptions: TRPCInfiniteQueryOptions<TDef>;
 
   /**
    * Calculate the TanStack Query Key for a Infinite Query Procedure
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/query-keys
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryKey
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/query-keys
    */
   infiniteQueryKey: (input?: Partial<TDef['input']>) => DataTag<
     TRPCQueryKey<TDef['featureFlags']['keyPrefix']>,
@@ -124,8 +120,7 @@ export interface DecorateInfiniteQueryProcedure<TDef extends ResolverDef>
   /**
    * Calculate a TanStack Query Filter for a Infinite Query Procedure
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/filters
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryFilter
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/filters
    */
   infiniteQueryFilter: (
     input?: Partial<TDef['input']>,
@@ -157,18 +152,16 @@ export interface DecorateQueryProcedure<TDef extends ResolverDef>
   extends TypeHelper<TDef>,
     DecorateRouterKeyable<TDef['featureFlags']> {
   /**
-   * Create a set of type-safe query options that can be passed to `useQuery`, `prefetchQuery` etc.
+   * Create a set of type-safe query options that can be passed to `createQuery`, `prefetchQuery` etc.
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/reference/queryOptions#queryoptions
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryOptions
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/reference/queryOptions
    */
   queryOptions: TRPCQueryOptions<TDef>;
 
   /**
    * Calculate the TanStack Query Key for a Query Procedure
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/query-keys
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryKey
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/query-keys
    */
   queryKey: (input?: Partial<TDef['input']>) => DataTag<
     TRPCQueryKey<TDef['featureFlags']['keyPrefix']>,
@@ -182,8 +175,7 @@ export interface DecorateQueryProcedure<TDef extends ResolverDef>
   /**
    * Calculate a TanStack Query Filter for a Query Procedure
    *
-   * @see https://tanstack.com/query/latest/docs/framework/react/guides/filters
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#queryFilter
+   * @see https://tanstack.com/query/latest/docs/framework/svelte/guides/filters
    */
   queryFilter: (
     input?: Partial<TDef['input']>,
@@ -215,16 +207,12 @@ export interface DecorateQueryProcedure<TDef extends ResolverDef>
 export interface DecorateMutationProcedure<TDef extends ResolverDef>
   extends TypeHelper<TDef> {
   /**
-   * Create a set of type-safe mutation options that can be passed to `useMutation`
-   *
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#mutationOptions
+   * Create a set of type-safe mutation options that can be passed to `createMutation`
    */
   mutationOptions: TRPCMutationOptions<TDef>;
 
   /**
    * Calculate the TanStack Mutation Key for a Mutation Procedure
-   *
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#mutationKey
    */
   mutationKey: () => TRPCMutationKey<TDef['featureFlags']['keyPrefix']>;
 }
@@ -232,9 +220,7 @@ export interface DecorateMutationProcedure<TDef extends ResolverDef>
 export interface DecorateSubscriptionProcedure<TDef extends ResolverDef>
   extends TypeHelper<TDef> {
   /**
-   * Create a set of type-safe subscription options that can be passed to `useSubscription`
-   *
-   * @see https://trpc.io/docs/client/tanstack-react-query/usage#subscriptionOptions
+   * Create a set of type-safe subscription options for tRPC subscriptions
    */
   subscriptionOptions: TRPCSubscriptionOptions<TDef>;
 }
@@ -330,10 +316,8 @@ type UtilsMethods =
   | keyof DecorateSubscriptionProcedure<any>;
 
 /**
- * Create a typed proxy from your router types. Can also be used on the server.
- *
- * @see https://trpc.io/docs/client/tanstack-react-query/setup#3b-setup-without-react-context
- * @see https://trpc.io/docs/client/tanstack-react-query/server-components#5-create-a-trpc-caller-for-server-components
+ * Create a typed proxy from your router types.
+ * Use on the client with a tRPC client, or on the server with a router caller.
  */
 export function createTRPCOptionsProxy<
   TRouter extends AnyTRPCRouter,

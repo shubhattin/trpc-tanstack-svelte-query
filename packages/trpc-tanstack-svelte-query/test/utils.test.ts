@@ -1,4 +1,4 @@
-import { describe, expect } from 'vitest';
+import { describe, expect, it } from 'vitest';
 import { getQueryKeyInternal, readQueryKey } from '../src/internals/utils';
 
 describe(getQueryKeyInternal, () => {
@@ -11,12 +11,12 @@ describe(getQueryKeyInternal, () => {
         type: 'query',
       }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "b",
         ],
-        Object {
+        {
           "input": "input value",
           "type": "query",
         },
@@ -33,15 +33,15 @@ describe(getQueryKeyInternal, () => {
         prefix: 'prefix',
       }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "prefix",
         ],
-        Array [
+        [
           "a",
           "b",
         ],
-        Object {
+        {
           "input": "input value",
           "type": "query",
         },
@@ -53,8 +53,8 @@ describe(getQueryKeyInternal, () => {
     expect(
       getQueryKeyInternal({ prefix: undefined, path: ['a', 'b'], type: 'any' }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "b",
         ],
@@ -70,11 +70,11 @@ describe(getQueryKeyInternal, () => {
         prefix: 'prefix',
       }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "prefix",
         ],
-        Array [
+        [
           "a",
           "b",
         ],
@@ -91,12 +91,12 @@ describe(getQueryKeyInternal, () => {
         type: 'infinite',
       }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "a",
           "b",
         ],
-        Object {
+        {
           "input": 1,
           "type": "infinite",
         },
@@ -113,15 +113,15 @@ describe(getQueryKeyInternal, () => {
         prefix: 'prefix',
       }),
     ).toMatchInlineSnapshot(`
-      Array [
-        Array [
+      [
+        [
           "prefix",
         ],
-        Array [
+        [
           "a",
           "b",
         ],
-        Object {
+        {
           "input": 1,
           "type": "infinite",
         },

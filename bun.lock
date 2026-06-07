@@ -12,7 +12,7 @@
       "name": "trpc-tanstack-svelte-query",
       "version": "11.17.0",
       "devDependencies": {
-        "@tanstack/intent": "^0.0.27",
+        "@sveltejs/vite-plugin-svelte": "^7.1.2",
         "@tanstack/svelte-query": "^6",
         "@trpc/client": "11.17.0",
         "@trpc/server": "11.17.0",
@@ -23,6 +23,7 @@
         "svelte": "^5.56.2",
         "tsdown": "0.12.7",
         "typescript": "^5.9.2",
+        "vite": "^8.0.16",
         "vitest": "^4.0.18",
         "ws": "^8.0.0",
         "zod": "^4.2.1",
@@ -169,8 +170,6 @@
     "@sveltejs/load-config": ["@sveltejs/load-config@0.1.1", "", {}, "sha512-BXXm+VOH/9X4N7Dd1iZ2MqA1h7M+9i2noI8QYuLDY8QcN2WHYn7D/VK/+IJNfcAmRw7ACNJ538UT9GXIhnBTiA=="],
 
     "@sveltejs/vite-plugin-svelte": ["@sveltejs/vite-plugin-svelte@7.1.2", "", { "dependencies": { "deepmerge": "^4.3.1", "magic-string": "^0.30.21", "obug": "^2.1.0", "vitefu": "^1.1.2" }, "peerDependencies": { "svelte": "^5.46.4", "vite": "^8.0.0-beta.7 || ^8.0.0" } }, "sha512-DrUBA2UXRfDmUX/ZTiEopd3X40yavsJF1FX2RygcuIScHL7o5YX1fMvoYnDhjeJQC4weCOklirpNWlcb2NiSeA=="],
-
-    "@tanstack/intent": ["@tanstack/intent@0.0.27", "", { "dependencies": { "cac": "^6.7.14", "yaml": "^2.7.0" }, "bin": { "intent": "dist/cli.mjs", "intent-library": "dist/intent-library.mjs" } }, "sha512-R8U4uadLrp9uosW5G1J5s4RQtT7F0S2oqIfWX6OD7uObuM6vJLO0jZzw+Et7H3PFMnue3snjdzJYX5BmNV1RXA=="],
 
     "@tanstack/query-core": ["@tanstack/query-core@5.101.0", "", {}, "sha512-cQetA74EB+seWySv1TTKr828TnP0u39m6LykwDXIo84SNortpDkp30TMEjkqtYCNP9c40uT/iwl6MLiufEt0Ow=="],
 

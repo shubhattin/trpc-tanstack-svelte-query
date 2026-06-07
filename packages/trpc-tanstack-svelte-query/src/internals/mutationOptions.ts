@@ -83,7 +83,7 @@ export interface MutationOptionsOverride {
     originalFn: () => MaybePromise<void>;
     queryClient: QueryClient;
     /**
-     * Meta data passed in from the `useMutation()` hook
+     * Meta data passed in from the mutation options
      */
     meta: Record<string, unknown>;
   }) => MaybePromise<void>;
