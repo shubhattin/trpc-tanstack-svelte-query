@@ -1,0 +1,120 @@
+name: Release NPM Package
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag matching package version (e.g. v11.17.0)"
+        required: true
+      npm_dist_tag:
+        description: "npm dist-tag to publish under (e.g. beta, latest)"
+        required: false
+        default: beta
+
+permissions:
+  id-token: write
+  contents: read
+
+env:
+  PACKAGE_DIR: packages/trpc-tanstack-svelte-query
+
+jobs:
+  publish:
+    name: Publish to npm
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Resolve release tag
+        id: release_tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${{ github.event.release.tag_name }}"
+          fi
+
+          echo "TAG=$TAG" >> "$GITHUB_OUTPUT"
+          echo "Resolved tag: $TAG"
+
+      - name: Read package version
+        id: pkg_version
+        shell: bash
+        run: |
+          VERSION=$(jq -r '.version' "$PACKAGE_DIR/package.json")
+          if [[ -z "$VERSION" || "$VERSION" == "null" ]]; then
+            echo "Failed to read version from package.json"
+            exit 1
+          fi
+
+          echo "VERSION=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "Package version: $VERSION"
+
+      - name: Verify tag matches package version
+        shell: bash
+        run: |
+          TAG="${{ steps.release_tag.outputs.TAG }}"
+          VERSION="${{ steps.pkg_version.outputs.VERSION }}"
+          EXPECTED="v$VERSION"
+
+          if [[ "$TAG" != "$EXPECTED" ]]; then
+            echo "Tag ($TAG) does not match expected tag ($EXPECTED)"
+            exit 1
+          fi
+
+          echo "Tag matches package version"
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build package
+        run: bun run --filter trpc-tanstack-svelte-query build
+
+      - name: Test package
+        run: bun run --filter trpc-tanstack-svelte-query test
+
+      - name: Typecheck package
+        run: bun run --filter trpc-tanstack-svelte-query typecheck
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+          registry-url: https://registry.npmjs.org
+
+      - name: Resolve npm dist-tag
+        id: npm_dist_tag
+        shell: bash
+        run: |
+          if [[ "${GITHUB_EVENT_NAME}" == "workflow_dispatch" ]]; then
+            DIST_TAG="${{ inputs.npm_dist_tag }}"
+          elif [[ "${{ github.event.release.prerelease }}" == "true" ]]; then
+            DIST_TAG="beta"
+          else
+            VERSION="${{ steps.pkg_version.outputs.VERSION }}"
+            if [[ "$VERSION" == *-* ]]; then
+              DIST_TAG="beta"
+            else
+              DIST_TAG="latest"
+            fi
+          fi
+
+          if [[ -z "$DIST_TAG" ]]; then
+            echo "npm dist-tag is empty; aborting."
+            exit 1
+          fi
+
+          echo "DIST_TAG=$DIST_TAG" >> "$GITHUB_OUTPUT"
+          echo "Resolved npm dist-tag: $DIST_TAG"
+
+      - name: Publish to npm
+        working-directory: ${{ env.PACKAGE_DIR }}
+        run: npm publish --provenance --access public --tag "${{ steps.npm_dist_tag.outputs.DIST_TAG }}"

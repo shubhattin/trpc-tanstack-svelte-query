@@ -1,0 +1,32 @@
+name: Checks
+
+on:
+  push:
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Bun
+        uses: oven-sh/setup-bun@v2
+
+      - name: Install dependencies
+        run: bun install --frozen-lockfile
+
+      - name: Build trpc-tanstack-svelte-query
+        run: bun run --filter trpc-tanstack-svelte-query build
+
+      - name: Test trpc-tanstack-svelte-query
+        run: bun run --filter trpc-tanstack-svelte-query test
+
+      - name: Typecheck trpc-tanstack-svelte-query
+        run: bun run --filter trpc-tanstack-svelte-query typecheck
+
+      - name: Build test-app
+        run: bun run --filter test-app build
+
+      - name: Check test-app
+        run: bun run --filter test-app check
