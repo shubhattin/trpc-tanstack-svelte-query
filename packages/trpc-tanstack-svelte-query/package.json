@@ -1,7 +1,7 @@
 {
   "name": "trpc-tanstack-svelte-query",
   "type": "module",
-  "version": "11.17.0",
+  "version": "0.1.0-beta.1",
   "description": "TanStack Svelte Query Integration for tRPC",
   "author": "shubhattin",
   "license": "MIT",
