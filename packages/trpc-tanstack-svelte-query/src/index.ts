@@ -14,6 +14,12 @@ export type { TRPCQueryOptions } from './internals/queryOptions';
 export type { TRPCInfiniteQueryOptions } from './internals/infiniteQueryOptions';
 export type { TRPCMutationOptions } from './internals/mutationOptions';
 export type {
+  AnyTRPCMutationKey,
+  TRPCMutationKey,
+  TRPCMutationKeyWithPrefix,
+  TRPCMutationKeyWithoutPrefix,
+} from './internals/types';
+export type {
   TRPCSubscriptionOptions,
   TRPCSubscriptionStatus,
   TRPCSubscriptionConnectingResult,

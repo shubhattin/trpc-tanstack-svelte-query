@@ -16,7 +16,6 @@
   "scripts": {
     "build": "tsdown",
     "dev": "tsdown --watch",
-    "lint": "eslint --cache src",
     "test": "vitest run",
     "typecheck": "tsc --noEmit --preserveWatchOutput --pretty"
   },
@@ -52,10 +51,10 @@
     }
   },
   "peerDependencies": {
-    "@tanstack/svelte-query": "^6",
-    "@trpc/client": "^11.17.0",
-    "@trpc/server": "^11.17.0",
-    "svelte": "^5.25.0",
+    "@tanstack/svelte-query": ">=6",
+    "@trpc/client": ">=11.17.0",
+    "@trpc/server": ">=11.17.0",
+    "svelte": ">=5.25.0",
     "typescript": ">=5.7.2"
   },
   "devDependencies": {

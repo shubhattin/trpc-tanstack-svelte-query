@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { createQuery } from "@tanstack/svelte-query";
+	import { createMutation, createQuery } from "@tanstack/svelte-query";
 	import { useTRPC, useTRPCClient } from "$lib/trpc/client";
 	import { queryClient } from "$lib/trpc/queryClient";
 
@@ -13,10 +13,21 @@
 	let includeKeyA = $state(true);
 	let includeKeyB = $state(true);
 	let directResult = $state<number | null>(null);
+	let name = $state("world");
+	let lastGreetResult = $state<string | null>(null);
 
 	const addQuery = createQuery(() => trpc.add.queryOptions({ a, b }));
+	const greetMutation = createMutation(() =>
+		trpc.greet.mutationOptions({
+			onSuccess: (message) => {
+				lastGreetResult = message;
+			},
+		}),
+	);
 
 	const addQueryKey = $derived(trpc.add.queryKey({ a, b }));
+	const addQueryFilter = $derived(trpc.add.queryFilter({ a, b }));
+	const greetMutationKey = trpc.greet.mutationKey();
 	const manualQueryKey = $derived(
 		trpc.add.queryKey({
 			...(includeKeyA ? { a: keyA } : {}),
@@ -33,7 +44,7 @@
 	}
 
 	async function invalidateAddQuery() {
-		await queryClient.invalidateQueries({ queryKey: addQueryKey });
+		await queryClient.invalidateQueries(addQueryFilter);
 	}
 
 	async function invalidateManualQuery() {
@@ -42,6 +53,13 @@
 </script>
 
 <h1>tRPC + TanStack Svelte Query</h1>
+
+<section class="section first-section">
+	<h2>Query</h2>
+	<p class="section-desc">
+		Uses <code>trpc.add.queryOptions()</code>, <code>queryKey()</code>, and
+		<code>queryFilter()</code> with <code>createQuery</code>.
+	</p>
 
 <form class="form" onsubmit={(e) => e.preventDefault()}>
 	<label>
@@ -76,10 +94,45 @@
 </div>
 
 <p class="meta">Query key: <code>{JSON.stringify(addQueryKey)}</code></p>
+<p class="meta">
+	Query filter: <code>{JSON.stringify(addQueryFilter)}</code>
+</p>
 
 {#if directResult !== null}
 	<p>Direct client result: {directResult}</p>
 {/if}
+</section>
+
+<section class="section">
+	<h2>Mutation</h2>
+	<p class="section-desc">
+		Uses <code>trpc.greet.mutationOptions()</code> and
+		<code>mutationKey()</code> with <code>createMutation</code>.
+	</p>
+	<form class="form" onsubmit={(e) => e.preventDefault()}>
+		<label>
+			name
+			<input type="text" bind:value={name} />
+		</label>
+	</form>
+	<div class="actions">
+		<button
+			type="button"
+			disabled={greetMutation.isPending}
+			onclick={() => greetMutation.mutate({ name })}
+		>
+			{greetMutation.isPending ? "Greeting..." : "Run greet mutation"}
+		</button>
+	</div>
+	{#if greetMutation.isError}
+		<p>Error: {greetMutation.error.message}</p>
+	{:else if greetMutation.data ?? lastGreetResult}
+		<p>{greetMutation.data ?? lastGreetResult}</p>
+	{/if}
+	<p class="meta">
+		Mutation key: <code>{JSON.stringify(greetMutationKey)}</code>
+	</p>
+</section>
 
 <section class="section">
 	<h2>Manual query key invalidation</h2>
@@ -135,9 +188,14 @@
 		gap: 0.35rem;
 	}
 
-	input[type="number"] {
+	input[type="number"],
+	input[type="text"] {
 		width: 5rem;
 		padding: 0.25rem 0.5rem;
+	}
+
+	input[type="text"] {
+		width: 10rem;
 	}
 
 	input[type="checkbox"] {
@@ -166,6 +224,12 @@
 		margin-top: 2.5rem;
 		padding-top: 1.5rem;
 		border-top: 1px solid var(--border);
+	}
+
+	.first-section {
+		margin-top: 0;
+		padding-top: 0;
+		border-top: none;
 	}
 
 	.section h2 {

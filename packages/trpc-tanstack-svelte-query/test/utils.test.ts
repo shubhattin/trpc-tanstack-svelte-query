@@ -1,5 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import { getQueryKeyInternal, readQueryKey } from '../src/internals/utils';
+import {
+  getMutationKeyInternal,
+  getQueryKeyInternal,
+  readQueryKey,
+} from '../src/internals/utils';
 
 describe(getQueryKeyInternal, () => {
   it('creates a query key', () => {
@@ -127,6 +131,26 @@ describe(getQueryKeyInternal, () => {
         },
       ]
     `);
+  });
+});
+
+describe(getMutationKeyInternal, () => {
+  it('creates a mutation key', () => {
+    expect(
+      getMutationKeyInternal({
+        prefix: undefined,
+        path: ['greet'],
+      }),
+    ).toEqual([['greet']]);
+  });
+
+  it('creates a mutation key with prefix', () => {
+    expect(
+      getMutationKeyInternal({
+        prefix: 'api',
+        path: ['greet'],
+      }),
+    ).toEqual([['api'], ['greet']]);
   });
 });
 

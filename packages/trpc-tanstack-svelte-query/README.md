@@ -53,6 +53,8 @@ Call `createTRPCContext()` in a module that loads before `TRPCProvider` mounts (
 
 ## Usage
 
+Queries:
+
 ```svelte
 <script lang="ts">
   import { createQuery } from '@tanstack/svelte-query';
@@ -70,10 +72,35 @@ Call `createTRPCContext()` in a module that loads before `TRPCProvider` mounts (
 {/if}
 ```
 
+Mutations expose the same option-factory API as the React package — `mutationOptions()` and `mutationKey()` on mutation procedures:
+
+```svelte
+<script lang="ts">
+  import { createMutation } from '@tanstack/svelte-query';
+  import { useTRPC } from '$lib/trpc/client';
+  const trpc = useTRPC();
+
+  const greetMutation = createMutation(() => trpc.greet.mutationOptions());
+  const greetMutationKey = trpc.greet.mutationKey();
+</script>
+
+<button onclick={() => greetMutation.mutate({ name: 'world' })}>
+  Greet
+</button>
+```
+
 ## API
 
-- `createTRPCContext()` — create `useTRPC` / `useTRPCClient` helpers backed by Svelte context
-- `createTRPCOptionsProxy()` — singleton-style setup without a provider (SPA)
-- `TRPCContext.svelte` — provider component that connects a tRPC client and `QueryClient`
+On each procedure via `useTRPC()`:
+
+- **queries** — `queryOptions()`, `queryKey()`, `queryFilter()`
+- **mutations** — `mutationOptions()`, `mutationKey()`
+- **routers** — `pathKey()`, `pathFilter()`
+
+Package exports:
+
+- `createTRPCContext()` — `useTRPC` / `useTRPCClient` backed by Svelte context
+- `createTRPCOptionsProxy()` — singleton-style setup without a provider
+- `TRPCContext.svelte` — provider component for `trpcClient` + `QueryClient`
 
 For broader tRPC + TanStack Query concepts, see the [React package docs](https://trpc.io/docs/client/tanstack-react-query/setup); the Svelte API mirrors it closely.
