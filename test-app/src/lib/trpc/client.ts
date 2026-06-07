@@ -11,11 +11,6 @@ export const client = createTRPCClient<AppRouter>({
 	]
 });
 
-export const trpc = createTRPCOptionsProxy<AppRouter>({
-	client,
-	queryClient
-});
-
 const trpcContext = createTRPCContext<AppRouter>();
 
 export const setTrpcContext = () =>
