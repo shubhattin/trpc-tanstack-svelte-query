@@ -4,7 +4,7 @@ import type {
   TRPCClientErrorLike,
   TRPCRequestOptions,
 } from '@trpc/client';
-import { getUntypedClient, TRPCUntypedClient } from '@trpc/client';
+import type { TRPCUntypedClient } from '@trpc/client';
 import type {
   AnyTRPCProcedure,
   AnyTRPCRootTypes,
@@ -343,11 +343,9 @@ export function createTRPCOptionsProxy<
         );
       }
 
-      const client = opts.client as TRPCUntypedClient<TRouter> | TRPCClient<TRouter>;
+      const client = opts.client as any;
       const untypedClient =
-        client instanceof TRPCUntypedClient
-          ? client
-          : getUntypedClient(client as TRPCClient<TRouter>);
+        client[Symbol.for('trpc_untypedClient')] || client;
 
       return untypedClient[type](path, input, trpcOpts);
     };
